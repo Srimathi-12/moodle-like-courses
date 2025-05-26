@@ -46,15 +46,7 @@ const CourseOverviewPage: React.FC = () => {
 
   return (
     <Layout>
-      {/* Course Banner Image */}
-      <div className="mb-8 rounded-lg overflow-hidden shadow-lg">
-        <img 
-          src={courseBannerImageUrl} 
-          alt={`${courseTitle} Banner`} 
-          className="w-full h-64 object-cover" 
-        />
-      </div>
-
+      {/* Moved Back to Dashboard link and Title above the banner */}
       <div className="mb-6 flex items-center justify-between">
         <div>
           <Link to="/" className="inline-flex items-center text-academic-blue hover:underline mb-2">
@@ -63,6 +55,15 @@ const CourseOverviewPage: React.FC = () => {
           </Link>
           <h1 className="text-4xl font-bold text-gray-800">{courseTitle}</h1>
         </div>
+      </div>
+
+      {/* Course Banner Image */}
+      <div className="mb-8 rounded-lg overflow-hidden shadow-lg">
+        <img 
+          src={courseBannerImageUrl} 
+          alt={`${courseTitle} Banner`} 
+          className="w-full h-64 object-cover" 
+        />
       </div>
       
       {/* Attractive Content Section */}
