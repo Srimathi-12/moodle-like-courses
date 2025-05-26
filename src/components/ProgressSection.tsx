@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from "@/hooks/use-toast";
-// import { ChevronDown } from 'lucide-react'; Replaced with unicode
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const ProgressDetailItem: React.FC<{ value: number; total: number; label: string; colorClass: string }> = ({ value, total, label, colorClass }) => (
   <div className="flex items-center">
@@ -14,20 +14,60 @@ const ProgressDetailItem: React.FC<{ value: number; total: number; label: string
 );
 
 const ProgressSection: React.FC = () => {
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
+  const handlePreviousYear = () => {
+    const newYear = selectedYear - 1;
+    setSelectedYear(newYear);
+    toast({ 
+      title: "Year Changed", 
+      description: `Selected year: ${newYear}. Note: Actual progress data update for this year is not yet implemented.`
+    });
+  };
+
+  const handleNextYear = () => {
+    const newYear = selectedYear + 1;
+    setSelectedYear(newYear);
+    toast({ 
+      title: "Year Changed", 
+      description: `Selected year: ${newYear}. Note: Actual progress data update for this year is not yet implemented.`
+    });
+  };
+
   return (
     <div className="bg-white p-6 rounded-xl shadow-academic-card">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-lg font-semibold text-gray-800">My progress</h3>
-        <Button 
-          variant="outline" 
-          className="bg-white text-academic-blue border-academic-blue hover:bg-academic-light-blue text-xs"
-          onClick={() => toast({ title: "Date Filter Clicked", description: "Date selection functionality to be implemented."})}
-        >
-          June 2020 <span className="ml-1">▼</span>
-        </Button>
+        <div className="flex items-center space-x-1">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="bg-white text-academic-blue border-academic-blue hover:bg-academic-light-blue p-2"
+            onClick={handlePreviousYear}
+            aria-label="Previous year"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="bg-white text-academic-blue border-academic-blue hover:bg-academic-light-blue text-xs"
+            onClick={() => toast({ title: "Month Filter Clicked", description: "Month selection functionality to be implemented."})}
+          >
+            June {selectedYear} <span className="ml-1">▼</span>
+          </Button>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="bg-white text-academic-blue border-academic-blue hover:bg-academic-light-blue p-2"
+            onClick={handleNextYear}
+            aria-label="Next year"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
       <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-        {/* Simplified progress circle display */}
         <div className="relative w-40 h-40">
           <svg className="transform -rotate-90" viewBox="0 0 36 36">
             <path
@@ -35,7 +75,7 @@ const ProgressSection: React.FC = () => {
                 a 15.9155 15.9155 0 0 1 0 31.831
                 a 15.9155 15.9155 0 0 1 0 -31.831"
               fill="none"
-              stroke="#e6e6e6" // background circle
+              stroke="#e6e6e6"
               strokeWidth="3"
             />
             <path
@@ -43,9 +83,9 @@ const ProgressSection: React.FC = () => {
                 a 15.9155 15.9155 0 0 1 0 31.831
                 a 15.9155 15.9155 0 0 1 0 -31.831"
               fill="none"
-              stroke="hsl(var(--academic-blue))" // progress circle
+              stroke="hsl(var(--academic-blue))"
               strokeWidth="3"
-              strokeDasharray="70, 100" // 70% progress for example
+              strokeDasharray="70, 100"
               strokeLinecap="round"
             />
           </svg>
