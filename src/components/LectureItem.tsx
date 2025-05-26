@@ -3,7 +3,7 @@ import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from '@/components/ui/button';
 import { toast } from "@/hooks/use-toast";
-// import { Play } from 'lucide-react'; Replaced with unicode
+import { Video } from 'lucide-react'; // Import the Video icon
 
 interface LectureItemProps {
   title: string;
@@ -30,8 +30,9 @@ const LectureItem: React.FC<LectureItemProps> = ({ title, duration, imageUrl, im
         size="icon" 
         className="text-academic-blue bg-academic-blue/10 hover:bg-academic-blue/20 rounded-full"
         onClick={() => toast({ title: "Play Lecture", description: `Playing: ${title}`})}
+        aria-label={`Play lecture: ${title}`}
       >
-        <span className="text-lg">▶</span>
+        <Video className="h-5 w-5" /> {/* Replaced span with Video icon */}
       </Button>
     </div>
   );
