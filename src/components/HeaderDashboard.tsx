@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,7 +12,13 @@ const LiveBroadcastAvatar: React.FC<{ src?: string; fallback: string }> = ({ src
   </Avatar>
 );
 
-const HeaderDashboard: React.FC = () => {
+interface HeaderDashboardProps {
+  onSearch: (query: string) => void;
+}
+
+const HeaderDashboard: React.FC<HeaderDashboardProps> = ({ onSearch }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+
   const broadcastParticipants = [
     { src: "https://randomuser.me/api/portraits/women/68.jpg", fallback: "P1" },
     { src: "https://randomuser.me/api/portraits/men/75.jpg", fallback: "P2" },
@@ -21,9 +27,20 @@ const HeaderDashboard: React.FC = () => {
     { src: "https://randomuser.me/api/portraits/women/44.jpg", fallback: "P5" },
   ];
 
-  const handleSearch = () => {
-    // In a real app, you'd get the input value here
-    toast({ title: "Search Initiated", description: "Search functionality to be implemented." });
+  const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearchClick = () => {
+    onSearch(searchQuery);
+    // Optional: keep toast or remove if search updates UI directly
+    // toast({ title: "Search Initiated", description: `Searching for: ${searchQuery}` });
+  };
+  
+  const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSearchClick();
+    }
   };
 
   return (
@@ -53,13 +70,16 @@ const HeaderDashboard: React.FC = () => {
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
             <Input 
               type="search" 
-              placeholder="What do you want to learn?" 
+              placeholder="Search your courses..." 
               className="pl-10 pr-4 py-2 w-full rounded-lg border-academic-gray focus:ring-academic-blue focus:border-academic-blue"
+              value={searchQuery}
+              onChange={handleSearchInputChange}
+              onKeyDown={handleSearchKeyDown}
             />
           </div>
           <Button 
             className="ml-3 bg-academic-blue hover:bg-opacity-90 text-white"
-            onClick={handleSearch}
+            onClick={handleSearchClick}
           >
             Search
           </Button>

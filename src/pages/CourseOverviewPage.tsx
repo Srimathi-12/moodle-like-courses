@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -39,21 +38,52 @@ const CourseOverviewPage: React.FC = () => {
     'photo-1581091226825-a6a2a5aee158', // woman with laptop (another)
     'photo-1500673922987-e212871fec22', // yellow lights
   ];
+  
+  // Example: Choose a banner image based on the courseSlug or a default
+  const courseBannerImageId = courseSlug === 'cinema-4d' ? 'photo-1500673922987-e212871fec22' : 'photo-1488590528505-98d2b5aba04b';
+  const courseBannerImageUrl = `https://images.unsplash.com/${courseBannerImageId}?w=1200&h=400&fit=crop`;
+
 
   return (
     <Layout>
+      {/* Course Banner Image */}
+      <div className="mb-8 rounded-lg overflow-hidden shadow-lg">
+        <img 
+          src={courseBannerImageUrl} 
+          alt={`${courseTitle} Banner`} 
+          className="w-full h-64 object-cover" 
+        />
+      </div>
+
       <div className="mb-6 flex items-center justify-between">
         <div>
           <Link to="/" className="inline-flex items-center text-academic-blue hover:underline mb-2">
             <ArrowLeft className="h-4 w-4 mr-1" />
             Back to Dashboard
           </Link>
-          <h1 className="text-3xl font-bold text-gray-800">{courseTitle}</h1>
+          <h1 className="text-4xl font-bold text-gray-800">{courseTitle}</h1>
         </div>
       </div>
+      
+      {/* Attractive Content Section */}
+      <section className="mb-8 bg-white p-6 rounded-lg shadow-md">
+        <h2 className="text-2xl font-semibold text-academic-blue mb-3">About this Course</h2>
+        <p className="text-academic-dark-gray mb-4 leading-relaxed">
+          Welcome to the "{courseTitle}" course! This comprehensive program is designed to equip you with
+          essential skills and knowledge in {courseTitle.toLowerCase()}. Whether you're a beginner looking to start your journey
+          or an experienced professional aiming to upgrade your expertise, this course offers a structured path
+          to mastering the core concepts and practical applications.
+        </p>
+        <p className="text-academic-dark-gray leading-relaxed">
+          Throughout this course, you will dive deep into engaging modules, participate in hands-on activities,
+          and collaborate with peers. Our expert instructors are dedicated to providing you with a supportive
+          and interactive learning environment. Get ready to unlock new opportunities and achieve your learning goals!
+        </p>
+      </section>
 
+      <h2 className="text-2xl font-semibold text-gray-800 mb-4">Course Modules</h2>
       <p className="text-academic-dark-gray mb-6">
-        Welcome to {courseTitle}. Explore the modules below to get started with your learning journey.
+        Explore the modules below to get started with your learning journey in {courseTitle}. Each module is crafted to build upon the last, ensuring a cohesive learning experience.
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

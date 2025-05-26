@@ -1,18 +1,17 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import Layout from '@/components/Layout';
 import HeaderDashboard from '@/components/HeaderDashboard';
 import CourseCard from '@/components/CourseCard';
 import ProgressSection from '@/components/ProgressSection';
 import LectureItem from '@/components/LectureItem';
 import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react'; // Allowed icon
 import { toast } from "@/hooks/use-toast";
 
 const generateSlug = (title: string) => {
   return title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 };
 
-const courses = [
+const initialCourses = [
   { title: 'Cinema 4D', description: 'Elements design for web sites and mobile apps', progressValue: 8, progressMax: 12, gradientClass: 'from-purple-50 via-pink-50 to-rose-50' },
   { title: 'UI/UX Design', description: 'From concept to prototype', progressValue: 4, progressMax: 15, gradientClass: 'from-blue-50 via-indigo-50 to-purple-50' },
   { title: 'Graphic design', description: 'Digital computer graphics', progressValue: 1, progressMax: 10, gradientClass: 'from-sky-50 via-cyan-50 to-teal-50' },
@@ -25,9 +24,25 @@ const popularLections = [
 ];
 
 const Index = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearch = (query: string) => {
+    setSearchTerm(query.toLowerCase());
+  };
+
+  const filteredCourses = useMemo(() => {
+    if (!searchTerm) {
+      return initialCourses;
+    }
+    return initialCourses.filter(course => 
+      course.title.toLowerCase().includes(searchTerm) || 
+      course.description.toLowerCase().includes(searchTerm)
+    );
+  }, [searchTerm]);
+
   return (
     <Layout>
-      <HeaderDashboard />
+      <HeaderDashboard onSearch={handleSearch} />
 
       <section className="mb-8">
         <div className="flex justify-between items-center mb-4">
@@ -40,19 +55,22 @@ const Index = () => {
             View all
           </Button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {courses.map((course, index) => (
-            <CourseCard key={index} {...course} slug={course.slug} />
-          ))}
-           {/* Add Course Card */}
-           <button 
-            onClick={() => toast({ title: "Add Course Clicked", description: "Functionality to add a new course can be implemented here." })}
-            className="p-6 rounded-xl border-2 border-dashed border-academic-gray flex flex-col items-center justify-center text-academic-dark-gray hover:border-academic-blue hover:text-academic-blue transition-colors cursor-pointer min-h-[200px] bg-academic-soft-bg/50 w-full focus:outline-none focus:ring-2 focus:ring-academic-blue focus:ring-opacity-50"
-          >
-            <Plus className="h-10 w-10 mb-2" />
-            <span className="font-medium">Add Course</span>
-          </button>
-        </div>
+        {filteredCourses.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredCourses.map((course, index) => (
+              <CourseCard key={index} {...course} slug={course.slug} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-10 text-academic-dark-gray">
+            <p className="text-lg">No courses found matching your search "{searchTerm}".</p>
+            {searchTerm && (
+              <Button variant="link" onClick={() => setSearchTerm('')} className="mt-2 text-academic-blue">
+                Clear search
+              </Button>
+            )}
+          </div>
+        )}
       </section>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
