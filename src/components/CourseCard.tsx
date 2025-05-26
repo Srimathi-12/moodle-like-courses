@@ -1,21 +1,27 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress"; // Using shadcn Progress
-import { ChevronRight } from 'lucide-react'; // Allowed icon
-import { toast } from "@/hooks/use-toast";
+import { Progress } from "@/components/ui/progress";
+import { ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 interface CourseCardProps {
   title: string;
   description: string;
   progressValue: number;
   progressMax: number;
-  bgColorClass?: string; // e.g., 'bg-academic-light-blue' or 'bg-academic-light-purple'
-  gradientClass?: string; // e.g. 'from-blue-100 to-purple-100'
+  bgColorClass?: string;
+  gradientClass?: string;
+  slug: string; // Add slug prop
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({ title, description, progressValue, progressMax, bgColorClass = 'bg-white', gradientClass }) => {
+const CourseCard: React.FC<CourseCardProps> = ({ title, description, progressValue, progressMax, bgColorClass = 'bg-white', gradientClass, slug }) => {
   const percentage = (progressValue / progressMax) * 100;
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  const handleContinue = () => {
+    navigate(`/course/${slug}`); // Navigate to course overview page
+  };
 
   return (
     <div className={`p-6 rounded-xl shadow-academic-card flex flex-col justify-between h-full min-h-[200px] ${gradientClass ? `bg-gradient-to-br ${gradientClass}` : bgColorClass}`}>
@@ -32,7 +38,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ title, description, progressVal
           variant="ghost" 
           size="sm" 
           className="mt-3 -ml-2 text-academic-blue hover:bg-academic-blue/10"
-          onClick={() => toast({ title: "Continue Course", description: `Continuing ${title}`})}
+          onClick={handleContinue} // Updated onClick handler
         >
           Continue <ChevronRight className="h-4 w-4 ml-1" />
         </Button>
