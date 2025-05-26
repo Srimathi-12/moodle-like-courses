@@ -2,6 +2,13 @@ import React, { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from "@/hooks/use-toast";
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const ProgressDetailItem: React.FC<{ value: number; total: number; label: string; colorClass: string }> = ({ value, total, label, colorClass }) => (
   <div className="flex items-center">
@@ -50,23 +57,52 @@ const defaultProgressData: YearProgressData = {
 
 const ProgressSection: React.FC = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [selectedMonth, setSelectedMonth] = useState('June'); // Added for clarity, not yet dynamic
 
   const currentProgress = useMemo(() => {
     return mockProgressData[selectedYear] || defaultProgressData;
   }, [selectedYear]);
 
+  const availableYears = useMemo(() => {
+    return Object.keys(mockProgressData).map(Number).sort((a, b) => a - b);
+  }, []);
+
   const handlePreviousYear = () => {
-    const newYear = selectedYear - 1;
-    setSelectedYear(newYear);
-    const yearDataExists = !!mockProgressData[newYear];
-    toast({
-      title: "Year Changed",
-      description: `Selected year: ${newYear}. ${yearDataExists ? 'Progress data updated.' : 'No data for this year, showing defaults.'}`
-    });
+    const currentIndex = availableYears.indexOf(selectedYear);
+    if (currentIndex > 0) {
+      const newYear = availableYears[currentIndex - 1];
+      setSelectedYear(newYear);
+      toast({
+        title: "Year Changed",
+        description: `Selected year: ${newYear}. Progress data updated.`
+      });
+    } else {
+      toast({
+        title: "Year Change",
+        description: "Already at the earliest available year."
+      });
+    }
   };
 
   const handleNextYear = () => {
-    const newYear = selectedYear + 1;
+    const currentIndex = availableYears.indexOf(selectedYear);
+    if (currentIndex < availableYears.length - 1) {
+      const newYear = availableYears[currentIndex + 1];
+      setSelectedYear(newYear);
+      toast({
+        title: "Year Changed",
+        description: `Selected year: ${newYear}. Progress data updated.`
+      });
+    } else {
+      toast({
+        title: "Year Change",
+        description: "Already at the latest available year."
+      });
+    }
+  };
+
+  const handleYearSelect = (yearString: string) => {
+    const newYear = parseInt(yearString, 10);
     setSelectedYear(newYear);
     const yearDataExists = !!mockProgressData[newYear];
     toast({
@@ -86,23 +122,36 @@ const ProgressSection: React.FC = () => {
             className="bg-white text-academic-blue border-academic-blue hover:bg-academic-light-blue p-2"
             onClick={handlePreviousYear}
             aria-label="Previous year"
+            disabled={availableYears.indexOf(selectedYear) === 0}
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="bg-white text-academic-blue border-academic-blue hover:bg-academic-light-blue text-xs"
-            onClick={() => toast({ title: "Month Filter Clicked", description: "Month selection functionality to be implemented." })}
-          >
-            June {selectedYear} <span className="ml-1">▼</span>
-          </Button>
+          
+          <Select value={selectedYear.toString()} onValueChange={handleYearSelect}>
+            <SelectTrigger 
+              className="w-auto bg-white text-academic-blue border-academic-blue hover:bg-academic-light-blue text-xs px-3 py-2 h-9"
+              aria-label={`Select year, current month ${selectedMonth}`}
+            >
+              <SelectValue placeholder="Select year">
+                {selectedMonth} {selectedYear}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              {availableYears.map(year => (
+                <SelectItem key={year} value={year.toString()}>
+                  {selectedMonth} {year}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
           <Button
             variant="outline"
             size="sm"
             className="bg-white text-academic-blue border-academic-blue hover:bg-academic-light-blue p-2"
             onClick={handleNextYear}
             aria-label="Next year"
+            disabled={availableYears.indexOf(selectedYear) === availableYears.length - 1}
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
