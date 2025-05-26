@@ -1,17 +1,9 @@
-
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
-
-// Helper to format slug back to title (simple version)
-const formatSlugToTitle = (slug: string): string => {
-  return slug
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-};
+import { formatSlugToTitle } from '@/lib/utils';
 
 const ModulePage: React.FC = () => {
   const { courseSlug, moduleSlug } = useParams<{ courseSlug: string; moduleSlug: string }>();

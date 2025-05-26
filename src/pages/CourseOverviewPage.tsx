@@ -4,27 +4,8 @@ import Layout from '@/components/Layout';
 import ModuleCard from '@/components/ModuleCard';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
-import { generateSlug } from '@/lib/utils'; // Import generateSlug
-
-const moduleData = [
-  { title: 'Clear all your doubts', seed: 'doubts' },
-  { title: 'Attendance', seed: 'attendance' },
-  { title: 'Introduction', seed: 'introduction' },
-  { title: 'Operations', seed: 'operations' },
-  { title: 'Management', seed: 'management' },
-  { title: 'Virtual Classroom', seed: 'classroom' },
-  { title: 'Trends Discussion', seed: 'trends' },
-  { title: 'Assignment & Assessment', seed: 'assessment' },
-  { title: 'Certificate', seed: 'certificate' },
-];
-
-// Helper to format slug back to title (simple version)
-const formatSlugToTitle = (slug: string): string => {
-  return slug
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-};
+import { generateSlug, formatSlugToTitle } from '@/lib/utils'; // Import formatSlugToTitle from utils
+import { courseModules } from '@/lib/courseData'; // Import courseModules
 
 const CourseOverviewPage: React.FC = () => {
   const { courseSlug } = useParams<{ courseSlug: string }>();
@@ -88,7 +69,7 @@ const CourseOverviewPage: React.FC = () => {
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {moduleData.map((item, index) => {
+        {courseModules.map((item, index) => { // Use imported courseModules
           const unsplashId = placeholderImages[index % placeholderImages.length];
           const imageUrl = index < placeholderImages.length 
             ? `https://images.unsplash.com/${unsplashId}?w=400&h=300&fit=crop`
