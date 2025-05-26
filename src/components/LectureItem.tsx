@@ -1,18 +1,18 @@
-
 import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from '@/components/ui/button';
-import { toast } from "@/hooks/use-toast";
-import { Video } from 'lucide-react'; // Import the Video icon
+import { Video } from 'lucide-react';
 
 interface LectureItemProps {
   title: string;
   duration: string;
   imageUrl?: string;
   imageFallback: string;
+  videoUrl: string;
+  onPlay: (videoUrl: string, title: string) => void;
 }
 
-const LectureItem: React.FC<LectureItemProps> = ({ title, duration, imageUrl, imageFallback }) => {
+const LectureItem: React.FC<LectureItemProps> = ({ title, duration, imageUrl, imageFallback, videoUrl, onPlay }) => {
   return (
     <div className="bg-white p-4 rounded-xl shadow-academic-card flex items-center justify-between hover:shadow-lg transition-shadow">
       <div className="flex items-center">
@@ -29,10 +29,10 @@ const LectureItem: React.FC<LectureItemProps> = ({ title, duration, imageUrl, im
         variant="ghost" 
         size="icon" 
         className="text-academic-blue bg-academic-blue/10 hover:bg-academic-blue/20 rounded-full"
-        onClick={() => toast({ title: "Play Lecture", description: `Playing: ${title}`})}
+        onClick={() => onPlay(videoUrl, title)}
         aria-label={`Play lecture: ${title}`}
       >
-        <Video className="h-5 w-5" /> {/* Replaced span with Video icon */}
+        <Video className="h-5 w-5" />
       </Button>
     </div>
   );

@@ -4,6 +4,7 @@ import HeaderDashboard from '@/components/HeaderDashboard';
 import CourseCard from '@/components/CourseCard';
 import ProgressSection from '@/components/ProgressSection';
 import LectureItem from '@/components/LectureItem';
+import VideoPlayer from '@/components/VideoPlayer';
 import { Button } from '@/components/ui/button';
 import { toast } from "@/hooks/use-toast";
 
@@ -18,13 +19,14 @@ const initialCourses = [
 ].map(course => ({ ...course, slug: generateSlug(course.title) }));
 
 const popularLections = [
-  { title: 'Human centered design', duration: '1h 30 min', imageUrl: 'https://randomuser.me/api/portraits/women/1.jpg', imageFallback: 'HC' },
-  { title: 'E-learning & digital cultures', duration: '45 min', imageUrl: 'https://randomuser.me/api/portraits/women/2.jpg', imageFallback: 'ED' },
-  { title: 'SQL: nothing superfluous', duration: '1h 15 min', imageUrl: 'https://randomuser.me/api/portraits/men/1.jpg', imageFallback: 'SN' },
+  { title: 'Human centered design', duration: '1h 30 min', imageUrl: 'https://randomuser.me/api/portraits/women/1.jpg', imageFallback: 'HC', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+  { title: 'E-learning & digital cultures', duration: '45 min', imageUrl: 'https://randomuser.me/api/portraits/women/2.jpg', imageFallback: 'ED', videoUrl: 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4' },
+  { title: 'SQL: nothing superfluous', duration: '1h 15 min', imageUrl: 'https://randomuser.me/api/portraits/men/1.jpg', imageFallback: 'SN', videoUrl: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4' },
 ];
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [playingVideo, setPlayingVideo] = useState<{ url: string; title: string } | null>(null);
 
   const handleSearch = (query: string) => {
     setSearchTerm(query.toLowerCase());
@@ -40,6 +42,14 @@ const Index = () => {
     );
   }, [searchTerm]);
 
+  const handlePlayLecture = (videoUrl: string, title: string) => {
+    setPlayingVideo({ url: videoUrl, title });
+  };
+
+  const handleClosePlayer = () => {
+    setPlayingVideo(null);
+  };
+
   return (
     <Layout>
       <HeaderDashboard onSearch={handleSearch} />
@@ -47,13 +57,6 @@ const Index = () => {
       <section className="mb-8">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold text-gray-800">My courses</h2>
-          <Button 
-            variant="link" 
-            className="text-academic-blue hover:text-opacity-80"
-            onClick={() => toast({ title: "View All Courses", description: "This would display all your courses."})}
-          >
-            View all
-          </Button>
         </div>
         {filteredCourses.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -90,11 +93,23 @@ const Index = () => {
           </div>
           <div className="space-y-4">
             {popularLections.map((lection, index) => (
-              <LectureItem key={index} {...lection} />
+              <LectureItem 
+                key={index} 
+                {...lection} 
+                onPlay={handlePlayLecture}
+              />
             ))}
           </div>
         </div>
       </div>
+
+      {playingVideo && (
+        <VideoPlayer 
+          src={playingVideo.url} 
+          title={playingVideo.title}
+          onClose={handleClosePlayer} 
+        />
+      )}
     </Layout>
   );
 };

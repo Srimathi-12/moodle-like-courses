@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { toast } from "@/hooks/use-toast";
-// import { Search } from 'lucide-react'; // Icon constraint
+// import { toast } from "@/hooks/use-toast"; // Removed as it's no longer used
 
 const LiveBroadcastAvatar: React.FC<{ src?: string; fallback: string }> = ({ src, fallback }) => (
   <Avatar className="h-10 w-10 border-2 border-white -ml-2 first:ml-0 hover:z-10 transition-all duration-200 hover:scale-110">
@@ -33,8 +32,6 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({ onSearch }) => {
 
   const handleSearchClick = () => {
     onSearch(searchQuery);
-    // Optional: keep toast or remove if search updates UI directly
-    // toast({ title: "Search Initiated", description: `Searching for: ${searchQuery}` });
   };
   
   const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -54,19 +51,10 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({ onSearch }) => {
                 <LiveBroadcastAvatar key={i} src={p.src} fallback={p.fallback} />
               ))}
             </div>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="ml-3 bg-white text-academic-blue border-academic-blue hover:bg-academic-light-blue"
-              onClick={() => toast({ title: "More Participants", description: "Showing more broadcast participants."})}
-            >
-              More
-            </Button>
           </div>
         </div>
         <div className="flex items-center w-full sm:w-auto max-w-md">
           <div className="relative flex-grow">
-            {/* <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" /> */}
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
             <Input 
               type="search" 
