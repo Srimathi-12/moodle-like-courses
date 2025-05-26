@@ -5,6 +5,7 @@ import Layout from '@/components/Layout';
 import ModuleCard from '@/components/ModuleCard';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
+import { generateSlug } from '@/lib/utils'; // Import generateSlug
 
 const moduleData = [
   { title: 'Clear all your doubts', seed: 'doubts' },
@@ -58,17 +59,20 @@ const CourseOverviewPage: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {moduleData.map((item, index) => {
           const unsplashId = placeholderImages[index % placeholderImages.length];
-          // Using a mix of unsplash placeholders from context and picsum for more variety
           const imageUrl = index < placeholderImages.length 
             ? `https://images.unsplash.com/${unsplashId}?w=400&h=300&fit=crop`
             : `https://picsum.photos/seed/${item.seed}/400/300`;
           
+          const moduleSlug = generateSlug(item.title); // Generate module slug
+
           return (
             <ModuleCard
               key={item.title}
               title={item.title}
               imageUrl={imageUrl}
               altText={item.title}
+              courseSlug={courseSlug || ''} // Pass courseSlug
+              moduleSlug={moduleSlug} // Pass moduleSlug
             />
           );
         })}
