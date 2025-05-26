@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from "@/hooks/use-toast";
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -13,24 +13,65 @@ const ProgressDetailItem: React.FC<{ value: number; total: number; label: string
   </div>
 );
 
+interface YearProgressData {
+  totalHours: number;
+  visitedLectures: { value: number; total: number };
+  completedTasks: { value: number; total: number };
+  progressPercentage: number;
+}
+
+const mockProgressData: Record<number, YearProgressData> = {
+  2023: {
+    totalHours: 120,
+    visitedLectures: { value: 60, total: 100 },
+    completedTasks: { value: 25, total: 80 },
+    progressPercentage: 65,
+  },
+  2024: {
+    totalHours: 134,
+    visitedLectures: { value: 75, total: 115 },
+    completedTasks: { value: 32, total: 94 },
+    progressPercentage: 70,
+  },
+  2025: {
+    totalHours: 150,
+    visitedLectures: { value: 90, total: 130 },
+    completedTasks: { value: 45, total: 110 },
+    progressPercentage: 78,
+  },
+};
+
+const defaultProgressData: YearProgressData = {
+  totalHours: 0,
+  visitedLectures: { value: 0, total: 0 },
+  completedTasks: { value: 0, total: 0 },
+  progressPercentage: 0,
+};
+
 const ProgressSection: React.FC = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
+  const currentProgress = useMemo(() => {
+    return mockProgressData[selectedYear] || defaultProgressData;
+  }, [selectedYear]);
 
   const handlePreviousYear = () => {
     const newYear = selectedYear - 1;
     setSelectedYear(newYear);
-    toast({ 
-      title: "Year Changed", 
-      description: `Selected year: ${newYear}. Note: Actual progress data update for this year is not yet implemented.`
+    const yearDataExists = !!mockProgressData[newYear];
+    toast({
+      title: "Year Changed",
+      description: `Selected year: ${newYear}. ${yearDataExists ? 'Progress data updated.' : 'No data for this year, showing defaults.'}`
     });
   };
 
   const handleNextYear = () => {
     const newYear = selectedYear + 1;
     setSelectedYear(newYear);
-    toast({ 
-      title: "Year Changed", 
-      description: `Selected year: ${newYear}. Note: Actual progress data update for this year is not yet implemented.`
+    const yearDataExists = !!mockProgressData[newYear];
+    toast({
+      title: "Year Changed",
+      description: `Selected year: ${newYear}. ${yearDataExists ? 'Progress data updated.' : 'No data for this year, showing defaults.'}`
     });
   };
 
@@ -39,26 +80,26 @@ const ProgressSection: React.FC = () => {
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-lg font-semibold text-gray-800">My progress</h3>
         <div className="flex items-center space-x-1">
-          <Button 
-            variant="outline" 
-            size="sm" 
+          <Button
+            variant="outline"
+            size="sm"
             className="bg-white text-academic-blue border-academic-blue hover:bg-academic-light-blue p-2"
             onClick={handlePreviousYear}
             aria-label="Previous year"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <Button 
-            variant="outline" 
-            size="sm" 
+          <Button
+            variant="outline"
+            size="sm"
             className="bg-white text-academic-blue border-academic-blue hover:bg-academic-light-blue text-xs"
-            onClick={() => toast({ title: "Month Filter Clicked", description: "Month selection functionality to be implemented."})}
+            onClick={() => toast({ title: "Month Filter Clicked", description: "Month selection functionality to be implemented." })}
           >
             June {selectedYear} <span className="ml-1">▼</span>
           </Button>
-          <Button 
-            variant="outline" 
-            size="sm" 
+          <Button
+            variant="outline"
+            size="sm"
             className="bg-white text-academic-blue border-academic-blue hover:bg-academic-light-blue p-2"
             onClick={handleNextYear}
             aria-label="Next year"
@@ -85,19 +126,29 @@ const ProgressSection: React.FC = () => {
               fill="none"
               stroke="hsl(var(--academic-blue))"
               strokeWidth="3"
-              strokeDasharray="70, 100"
+              strokeDasharray={`${currentProgress.progressPercentage}, 100`}
               strokeLinecap="round"
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-3xl font-bold text-academic-blue">134</span>
+            <span className="text-3xl font-bold text-academic-blue">{currentProgress.totalHours}</span>
             <span className="text-xs text-academic-dark-gray">Total hours</span>
           </div>
         </div>
 
         <div className="flex flex-col gap-4 mt-2 sm:mt-0 sm:ml-6">
-          <ProgressDetailItem value={75} total={115} label="Visited lectures" colorClass="bg-academic-blue" />
-          <ProgressDetailItem value={32} total={94} label="Completed tasks" colorClass="bg-purple-400" />
+          <ProgressDetailItem 
+            value={currentProgress.visitedLectures.value} 
+            total={currentProgress.visitedLectures.total} 
+            label="Visited lectures" 
+            colorClass="bg-academic-blue" 
+          />
+          <ProgressDetailItem 
+            value={currentProgress.completedTasks.value} 
+            total={currentProgress.completedTasks.total} 
+            label="Completed tasks" 
+            colorClass="bg-purple-400" 
+          />
         </div>
       </div>
     </div>
