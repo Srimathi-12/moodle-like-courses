@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import HeaderDashboard from '@/components/HeaderDashboard';
@@ -7,6 +6,7 @@ import ProgressSection from '@/components/ProgressSection';
 import LectureItem from '@/components/LectureItem';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react'; // Allowed icon
+import { toast } from "@/hooks/use-toast";
 
 const courses = [
   { title: 'Cinema 4D', description: 'Elements design for web sites and mobile apps', progressValue: 8, progressMax: 12, gradientClass: 'from-purple-50 via-pink-50 to-rose-50' },
@@ -28,17 +28,26 @@ const Index = () => {
       <section className="mb-8">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold text-gray-800">My courses</h2>
-          <Button variant="link" className="text-academic-blue hover:text-opacity-80">View all</Button>
+          <Button 
+            variant="link" 
+            className="text-academic-blue hover:text-opacity-80"
+            onClick={() => toast({ title: "View All Courses", description: "This would display all your courses."})}
+          >
+            View all
+          </Button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {courses.map((course, index) => (
             <CourseCard key={index} {...course} />
           ))}
            {/* Add Course Card */}
-           <div className="p-6 rounded-xl border-2 border-dashed border-academic-gray flex flex-col items-center justify-center text-academic-dark-gray hover:border-academic-blue hover:text-academic-blue transition-colors cursor-pointer min-h-[200px] bg-academic-soft-bg/50">
+           <button 
+            onClick={() => toast({ title: "Add Course Clicked", description: "Functionality to add a new course can be implemented here." })}
+            className="p-6 rounded-xl border-2 border-dashed border-academic-gray flex flex-col items-center justify-center text-academic-dark-gray hover:border-academic-blue hover:text-academic-blue transition-colors cursor-pointer min-h-[200px] bg-academic-soft-bg/50 w-full focus:outline-none focus:ring-2 focus:ring-academic-blue focus:ring-opacity-50"
+          >
             <Plus className="h-10 w-10 mb-2" />
             <span className="font-medium">Add Course</span>
-          </div>
+          </button>
         </div>
       </section>
 
@@ -49,7 +58,13 @@ const Index = () => {
         <div>
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold text-gray-800">Popular lections</h2>
-            <Button variant="link" className="text-academic-blue hover:text-opacity-80">View all</Button>
+            <Button 
+              variant="link" 
+              className="text-academic-blue hover:text-opacity-80"
+              onClick={() => toast({ title: "View All Lections", description: "This would display all popular lections."})}
+            >
+              View all
+            </Button>
           </div>
           <div className="space-y-4">
             {popularLections.map((lection, index) => (

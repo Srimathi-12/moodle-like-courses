@@ -2,6 +2,7 @@
 import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from '@/components/ui/button';
+import { toast } from "@/hooks/use-toast";
 // import { Play } from 'lucide-react'; Replaced with unicode
 
 interface LectureItemProps {
@@ -24,7 +25,12 @@ const LectureItem: React.FC<LectureItemProps> = ({ title, duration, imageUrl, im
           <p className="text-xs text-academic-dark-gray">🕒 {duration}</p>
         </div>
       </div>
-      <Button variant="ghost" size="icon" className="text-academic-blue bg-academic-blue/10 hover:bg-academic-blue/20 rounded-full">
+      <Button 
+        variant="ghost" 
+        size="icon" 
+        className="text-academic-blue bg-academic-blue/10 hover:bg-academic-blue/20 rounded-full"
+        onClick={() => toast({ title: "Play Lecture", description: `Playing: ${title}`})}
+      >
         <span className="text-lg">▶</span>
       </Button>
     </div>

@@ -1,6 +1,6 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { toast } from "@/hooks/use-toast";
 // import { ChevronDown } from 'lucide-react'; Replaced with unicode
 
 const ProgressDetailItem: React.FC<{ value: number; total: number; label: string; colorClass: string }> = ({ value, total, label, colorClass }) => (
@@ -18,7 +18,11 @@ const ProgressSection: React.FC = () => {
     <div className="bg-white p-6 rounded-xl shadow-academic-card">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-lg font-semibold text-gray-800">My progress</h3>
-        <Button variant="outline" className="bg-white text-academic-blue border-academic-blue hover:bg-academic-light-blue text-xs">
+        <Button 
+          variant="outline" 
+          className="bg-white text-academic-blue border-academic-blue hover:bg-academic-light-blue text-xs"
+          onClick={() => toast({ title: "Date Filter Clicked", description: "Date selection functionality to be implemented."})}
+        >
           June 2020 <span className="ml-1">▼</span>
         </Button>
       </div>

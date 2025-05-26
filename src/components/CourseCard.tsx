@@ -3,6 +3,7 @@ import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress"; // Using shadcn Progress
 import { ChevronRight } from 'lucide-react'; // Allowed icon
+import { toast } from "@/hooks/use-toast";
 
 interface CourseCardProps {
   title: string;
@@ -27,7 +28,12 @@ const CourseCard: React.FC<CourseCardProps> = ({ title, description, progressVal
           <span>{`${progressValue}/${progressMax}`}</span>
         </div>
         <Progress value={percentage} className="h-2 [&>div]:bg-academic-blue" />
-        <Button variant="ghost" size="sm" className="mt-3 -ml-2 text-academic-blue hover:bg-academic-blue/10">
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="mt-3 -ml-2 text-academic-blue hover:bg-academic-blue/10"
+          onClick={() => toast({ title: "Continue Course", description: `Continuing ${title}`})}
+        >
           Continue <ChevronRight className="h-4 w-4 ml-1" />
         </Button>
       </div>
