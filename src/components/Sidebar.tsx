@@ -1,13 +1,13 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { toast } from "@/hooks/use-toast";
 // Due to icon constraints, we'll use text or simple Unicode characters for icons.
 // import { LayoutGrid, Calendar, BookOpen, FileText, Users, Library, SettingsIcon } from 'lucide-react';
 
 const navItems = [
-  { name: 'Dashboard', icon: '📊', path: '/dashboard' }, // Example path
+  { name: 'Dashboard', icon: '📊', path: '/dashboard' }, // Path can be updated if /dashboard page is created
   { name: 'Schedule', icon: '🗓️', path: '/schedule' },
-  { name: 'My courses', icon: '📚', path: '/' }, // Current page
+  { name: 'My courses', icon: '📚', path: '/' }, // Main page
   { name: 'Reports', icon: '📄', path: '/reports' },
   { name: 'Teams', icon: '👥', path: '/teams' },
   { name: 'Library', icon: '🏛️', path: '/library' },
@@ -15,40 +15,32 @@ const navItems = [
 ];
 
 const Sidebar: React.FC = () => {
-  const activeItem = 'My courses'; // Example of an active item
-
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, itemName: string, itemPath: string) => {
-    e.preventDefault(); // Prevent actual navigation for now
-    if (itemName === activeItem) {
-      toast({ title: "Already on Page", description: `You are currently on the ${itemName} page.` });
-    } else {
-      toast({ title: "Navigation Attempt", description: `Clicked on ${itemName}. Would navigate to ${itemPath}` });
-    }
-    // Later, this could be: navigate(itemPath);
-  };
+  const location = useLocation(); // Get current location
 
   return (
     <aside className="w-64 bg-white text-academic-dark-gray p-6 flex flex-col shadow-lg">
       <div className="text-3xl font-bold text-academic-blue mb-10">
-        <span className="bg-academic-blue text-white rounded-full h-10 w-10 flex items-center justify-center mr-2">a</span>
-        cademic
+        {/* Ensure Link wraps the logo if it should navigate home, or keep as div if not clickable */}
+        <Link to="/" className="flex items-center">
+          <span className="bg-academic-blue text-white rounded-full h-10 w-10 flex items-center justify-center mr-2">a</span>
+          cademic
+        </Link>
       </div>
       <nav className="flex-grow">
         <ul>
           {navItems.map((item) => (
             <li key={item.name} className="mb-3">
-              <a
-                href={item.path} // Use path for semantic href
-                onClick={(e) => handleNavClick(e, item.name, item.path)}
+              <Link
+                to={item.path}
                 className={`flex items-center py-2 px-3 rounded-lg transition-colors duration-200 ease-in-out
-                  ${item.name === activeItem 
-                    ? 'bg-academic-blue text-white shadow-md' 
+                  ${location.pathname === item.path
+                    ? 'bg-academic-blue text-white shadow-md'
                     : 'hover:bg-academic-light-blue hover:text-academic-blue'
                   }`}
               >
                 <span className="mr-3 text-lg">{item.icon}</span>
                 <span className="font-medium">{item.name}</span>
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
