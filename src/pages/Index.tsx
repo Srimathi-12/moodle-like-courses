@@ -1,13 +1,64 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React from 'react';
+import Layout from '@/components/Layout';
+import HeaderDashboard from '@/components/HeaderDashboard';
+import CourseCard from '@/components/CourseCard';
+import ProgressSection from '@/components/ProgressSection';
+import LectureItem from '@/components/LectureItem';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react'; // Allowed icon
+
+const courses = [
+  { title: 'Cinema 4D', description: 'Elements design for web sites and mobile apps', progressValue: 8, progressMax: 12, gradientClass: 'from-purple-50 via-pink-50 to-rose-50' },
+  { title: 'UI/UX Design', description: 'From concept to prototype', progressValue: 4, progressMax: 15, gradientClass: 'from-blue-50 via-indigo-50 to-purple-50' },
+  { title: 'Graphic design', description: 'Digital computer graphics', progressValue: 1, progressMax: 10, gradientClass: 'from-sky-50 via-cyan-50 to-teal-50' },
+];
+
+const popularLections = [
+  { title: 'Human centered design', duration: '1h 30 min', imageUrl: 'https://randomuser.me/api/portraits/women/1.jpg', imageFallback: 'HC' },
+  { title: 'E-learning & digital cultures', duration: '45 min', imageUrl: 'https://randomuser.me/api/portraits/women/2.jpg', imageFallback: 'ED' },
+  { title: 'SQL: nothing superfluous', duration: '1h 15 min', imageUrl: 'https://randomuser.me/api/portraits/men/1.jpg', imageFallback: 'SN' },
+];
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <Layout>
+      <HeaderDashboard />
+
+      <section className="mb-8">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold text-gray-800">My courses</h2>
+          <Button variant="link" className="text-academic-blue hover:text-opacity-80">View all</Button>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {courses.map((course, index) => (
+            <CourseCard key={index} {...course} />
+          ))}
+           {/* Add Course Card */}
+           <div className="p-6 rounded-xl border-2 border-dashed border-academic-gray flex flex-col items-center justify-center text-academic-dark-gray hover:border-academic-blue hover:text-academic-blue transition-colors cursor-pointer min-h-[200px] bg-academic-soft-bg/50">
+            <Plus className="h-10 w-10 mb-2" />
+            <span className="font-medium">Add Course</span>
+          </div>
+        </div>
+      </section>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <ProgressSection />
+        </div>
+        <div>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold text-gray-800">Popular lections</h2>
+            <Button variant="link" className="text-academic-blue hover:text-opacity-80">View all</Button>
+          </div>
+          <div className="space-y-4">
+            {popularLections.map((lection, index) => (
+              <LectureItem key={index} {...lection} />
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

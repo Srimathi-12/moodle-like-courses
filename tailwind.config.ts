@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -38,7 +39,7 @@ export default {
 				},
 				muted: {
 					DEFAULT: 'hsl(var(--muted))',
-					foreground: 'hsl(var(--muted-foreground))'
+					foreground: 'hsl(var(--muted-foreground))
 				},
 				accent: {
 					DEFAULT: 'hsl(var(--accent))',
@@ -52,21 +53,20 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
-				}
+        // Custom colors based on the design
+        'academic-blue': 'hsl(var(--academic-blue))',
+        'academic-blue-foreground': 'hsl(var(--academic-blue-foreground))',
+        'academic-light-blue': 'hsl(var(--academic-light-blue))',
+        'academic-light-purple': 'hsl(var(--academic-light-purple))',
+        'academic-gray': 'hsl(var(--academic-gray))',
+        'academic-dark-gray': 'hsl(var(--academic-dark-gray))',
+        'academic-soft-bg': 'hsl(var(--academic-soft-bg))',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				sm: 'calc(var(--radius) - 4px)',
+        xl: 'calc(var(--radius) + 4px)', // For larger rounding like in cards
 			},
 			keyframes: {
 				'accordion-down': {
@@ -89,8 +89,12 @@ export default {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out'
-			}
+			},
+      boxShadow: {
+        'academic-card': '0px 10px 30px rgba(101, 101, 101, 0.1)',
+      }
 		}
 	},
 	plugins: [require("tailwindcss-animate")],
 } satisfies Config;
+
