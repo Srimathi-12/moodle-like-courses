@@ -1,0 +1,181 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 214 32% 91%;
+    --secondary-foreground: 221 39% 11%;
+
+    --muted: 240 5% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 221 83% 95%;
+    --accent-foreground: 221 39% 11%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 240 5% 93%;
+    --input: 240 5% 93%;
+    --ring: 221 83% 53%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 221 83% 53%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 221 39% 41%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 221 83% 85%;
+    --sidebar-accent-foreground: 221 39% 11%;
+    --sidebar-border: 221 39% 41%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+
+/* Custom Academic Colors */
+    --academic-blue: 244 77% 60%; /* #4A4AFF */
+    --academic-blue-foreground: 0 0% 100%; /* White */
+    --academic-light-blue: 230 100% 97%; /* approx #F4F7FF, for card subtle backgrounds */
+    --academic-light-purple: 250 60% 97%; /* for some card backgrounds */
+    --academic-gray: 220 10% 75%; /* For placeholder text, borders */
+    --academic-dark-gray: 220 10% 40%; /* For secondary text */
+    --academic-soft-bg: 220 20% 97%; /* Main page background */
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 221 83% 53%;
+    --sidebar-background: 221 39% 15%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 221 83% 53%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 217.2 32.6% 20%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 217.2 32.6% 20%;
+    --sidebar-ring: 221 83% 53%;
+
+      --academic-blue: 244 77% 60%;
+    --academic-blue-foreground: 0 0% 100%;
+    --academic-light-blue: 222.2 84% 7.9%;
+    --academic-light-purple: 222.2 84% 8.9%;
+    --academic-gray: 220 10% 55%;
+    --academic-dark-gray: 210 40% 88%;
+    --academic-soft-bg: 222.2 84% 4.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+  }
+
+  /* Professional design system utilities */
+  .shadow-card {
+    @apply shadow-lg shadow-secondary/5;
+  }
+
+  .glass-effect {
+    @apply bg-white/50 backdrop-blur-md;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Layout utilities */
+  .layout-container {
+    @apply container mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-6 md:py-8 lg:py-12;
+  }
+
+  /* Typography scale */
+  .h1 {
+    @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl;
+  }
+
+  .h2 {
+    @apply scroll-m-20 text-3xl font-semibold tracking-tight;
+  }
+
+  .h3 {
+    @apply scroll-m-20 text-2xl font-semibold tracking-tight;
+  }
+
+  .h4 {
+    @apply scroll-m-20 text-xl font-semibold tracking-tight;
+  }
+
+  .large {
+    @apply text-lg font-semibold;
+  }
+
+  .small {
+    @apply text-sm font-medium leading-none;
+  }
+
+  .subtle {
+    @apply text-sm text-muted-foreground;
+  }
+}
+
+
+/* For scrollbars if needed */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #9ca3af; /* Gray-400 */
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #6b7280; /* Gray-500 */
+}
+::-webkit-scrollbar-track {
+  background: #f3f4f6; /* Gray-100 */
+  border-radius: 3px;
+}
