@@ -1,16 +1,66 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, BookOpenText, Users, Video, TrendingUp, FileText, Award, MessageSquare, CalendarCheck } from 'lucide-react'; // Added more icons
+import { 
+  ArrowLeft, BookOpenText, Users, Video, TrendingUp, FileText, Award, MessageSquare, CalendarCheck 
+} from 'lucide-react';
 import { formatSlugToTitle } from '@/lib/utils';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/hooks/use-toast";
+
+interface Question {
+  id: string;
+  text: string;
+  author: string;
+  timestamp: Date;
+  module: string; // To associate question with the current module
+}
 
 const ModulePage: React.FC = () => {
   const { courseSlug, moduleSlug } = useParams<{ courseSlug: string; moduleSlug: string }>();
   
   const courseTitle = courseSlug ? formatSlugToTitle(courseSlug) : 'Course';
   const moduleTitle = moduleSlug ? formatSlugToTitle(moduleSlug) : 'Module';
+
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [newQuestionText, setNewQuestionText] = useState<string>('');
+  const [isAskQuestionDialogOpen, setIsAskQuestionDialogOpen] = useState<boolean>(false);
+
+  const handleAskQuestion = () => {
+    if (!newQuestionText.trim()) {
+      toast({
+        title: "Error",
+        description: "Question cannot be empty.",
+        variant: "destructive",
+      });
+      return;
+    }
+    const newQuestion: Question = {
+      id: Date.now().toString(), // Simple ID generation
+      text: newQuestionText,
+      author: "Student", // Hardcoded for now
+      timestamp: new Date(),
+      module: moduleTitle,
+    };
+    setQuestions(prevQuestions => [...prevQuestions, newQuestion]);
+    setNewQuestionText('');
+    setIsAskQuestionDialogOpen(false);
+    toast({
+      title: "Success",
+      description: "Your question has been submitted!",
+    });
+  };
 
   // Helper function to create a consistent section layout
   const renderModuleSection = (icon: React.ReactNode, title: string, children: React.ReactNode) => (
@@ -51,14 +101,60 @@ const ModulePage: React.FC = () => {
           <>
             <p>Welcome to the Doubts Clarification Hub for {courseTitle}!</p>
             <p>Here, you can post your questions about any topic covered in the "{moduleTitle}" module. Our instructors and fellow learners will help you resolve them.</p>
-            <p><strong>Features (Placeholder):</strong></p>
-            <ul className="list-disc list-inside ml-4">
+            
+            <Dialog open={isAskQuestionDialogOpen} onOpenChange={setIsAskQuestionDialogOpen}>
+              <DialogTrigger asChild>
+                <Button className="mt-4">Ask a Question</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[480px]">
+                <DialogHeader>
+                  <DialogTitle>Ask a New Question</DialogTitle>
+                  <DialogDescription>
+                    Type your question about "{moduleTitle}" below. It will be visible to instructors and other students.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <Textarea
+                    id="questionText"
+                    placeholder="Type your question here..."
+                    value={newQuestionText}
+                    onChange={(e) => setNewQuestionText(e.target.value)}
+                    className="min-h-[100px]"
+                  />
+                </div>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button variant="outline" onClick={() => setNewQuestionText('')}>Cancel</Button>
+                  </DialogClose>
+                  <Button onClick={handleAskQuestion}>Submit Question</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+
+            <div className="mt-6">
+              <h4 className="text-md font-semibold text-gray-700 mb-3">Asked Questions:</h4>
+              {questions.filter(q => q.module === moduleTitle).length > 0 ? (
+                <div className="space-y-4">
+                  {questions.filter(q => q.module === moduleTitle).map((question) => (
+                    <div key={question.id} className="p-3 bg-gray-50 rounded-md border border-gray-200">
+                      <p className="text-sm text-gray-800">{question.text}</p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Asked by: {question.author} on {question.timestamp.toLocaleDateString()} at {question.timestamp.toLocaleTimeString()}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500">No questions have been asked for this module yet. Be the first!</p>
+              )}
+            </div>
+            
+            <p className="mt-6"><strong>Other Features (Placeholder):</strong></p>
+            <ul className="list-disc list-inside ml-4 text-sm">
               <li>FAQ section for common queries.</li>
-              <li>Discussion forum to ask new questions.</li>
               <li>Direct messaging with instructors (subject to availability).</li>
               <li>Scheduled Q&A sessions.</li>
             </ul>
-            <Button className="mt-4">Ask a Question</Button>
           </>
         )}
 
@@ -186,7 +282,6 @@ const ModulePage: React.FC = () => {
           </>
         )}
 
-        {/* Fallback for modules not explicitly handled yet */}
         {![
             'clear-all-your-doubts', 'attendance', 'introduction', 'operations', 
             'management', 'virtual-classroom', 'trends-discussion', 
