@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import Layout from '@/components/Layout';
 import HeaderDashboard from '@/components/HeaderDashboard';
@@ -18,6 +19,14 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const generateSlug = (title: string) => {
   return title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
@@ -28,6 +37,20 @@ const initialCourses = [
   { title: 'UI/UX Design', description: 'From concept to prototype', progressValue: 4, progressMax: 15, gradientClass: 'from-blue-50 via-indigo-50 to-purple-50' },
   { title: 'Graphic design', description: 'Digital computer graphics', progressValue: 1, progressMax: 10, gradientClass: 'from-sky-50 via-cyan-50 to-teal-50' },
 ].map(course => ({ ...course, slug: generateSlug(course.title) }));
+
+// Course categories for dropdown
+const courseCategories = [
+  { value: 'all', label: 'All Courses' },
+  { value: 'design', label: 'Design Courses' },
+  { value: 'development', label: 'Development Courses' },
+];
+
+// Map courses to categories
+const courseCategoryMapping = {
+  'cinema-4d': 'design',
+  'ui-ux-design': 'design',
+  'graphic-design': 'design',
+};
 
 const initialPopularLectionsData = [
   { title: 'Human centered design', duration: '1h 30 min', imageUrl: 'https://randomuser.me/api/portraits/women/1.jpg', imageFallback: 'HC', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4' },
@@ -46,6 +69,8 @@ const initialNewLectureState = {
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [playingVideo, setPlayingVideo] = useState<{ url: string; title: string } | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedCourseSlug, setSelectedCourseSlug] = useState<string | null>(null);
 
   const [popularLectionsList, setPopularLectionsList] = useState(initialPopularLectionsData);
   const [isAddLectureDialogOpen, setIsAddLectureDialogOpen] = useState(false);
@@ -56,14 +81,33 @@ const Index = () => {
   };
 
   const filteredCourses = useMemo(() => {
-    if (!searchTerm) {
-      return initialCourses;
+    let courses = initialCourses;
+    // First apply the search term filter
+    if (searchTerm) {
+      courses = courses.filter(course => 
+        course.title.toLowerCase().includes(searchTerm) || 
+        course.description.toLowerCase().includes(searchTerm)
+      );
     }
-    return initialCourses.filter(course => 
-      course.title.toLowerCase().includes(searchTerm) || 
-      course.description.toLowerCase().includes(searchTerm)
-    );
-  }, [searchTerm]);
+    
+    // Then apply the category filter if not "all"
+    if (selectedCategory !== 'all') {
+      courses = courses.filter(course => 
+        courseCategoryMapping[course.slug as keyof typeof courseCategoryMapping] === selectedCategory
+      );
+    }
+    
+    return courses;
+  }, [searchTerm, selectedCategory]);
+
+  const handleCategoryChange = (value: string) => {
+    setSelectedCategory(value);
+    setSelectedCourseSlug(null); // Reset selected course when changing category
+  };
+
+  const handleCourseClick = (slug: string) => {
+    setSelectedCourseSlug(slug === selectedCourseSlug ? null : slug);
+  };
 
   const handlePlayLecture = (videoUrl: string, title: string) => {
     setPlayingVideo({ url: videoUrl, title });
@@ -114,11 +158,33 @@ const Index = () => {
       <section className="mb-8">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold text-gray-800">My courses</h2>
+          <div className="w-64">
+            <Select value={selectedCategory} onValueChange={handleCategoryChange}>
+              <SelectTrigger className="w-full bg-white">
+                <SelectValue placeholder="Select category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {courseCategories.map((category) => (
+                    <SelectItem key={category.value} value={category.value}>
+                      {category.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
         {filteredCourses.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredCourses.map((course, index) => (
-              <CourseCard key={index} {...course} slug={course.slug} />
+              <div 
+                key={index}
+                onClick={() => handleCourseClick(course.slug)}
+                className={`cursor-pointer transition-all duration-200 ${selectedCourseSlug === course.slug ? 'ring-2 ring-academic-blue scale-[1.02]' : ''}`}
+              >
+                <CourseCard {...course} slug={course.slug} />
+              </div>
             ))}
           </div>
         ) : (
