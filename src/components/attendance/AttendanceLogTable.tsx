@@ -19,6 +19,7 @@ import {
   PaginationPrevious,
   PaginationEllipsis,
 } from '@/components/ui/pagination';
+import { Card } from '@/components/ui/card'; // Added this import
 import { Search, Edit3, MoreHorizontal } from 'lucide-react';
 import AttendanceStatusBadge from './AttendanceStatusBadge';
 import type { AttendanceRecord } from '@/types/attendance';
@@ -200,3 +201,4 @@ const AttendanceLogTable: React.FC<AttendanceLogTableProps> = ({ records }) => {
 };
 
 export default AttendanceLogTable;
+
