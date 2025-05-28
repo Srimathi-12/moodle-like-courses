@@ -52,17 +52,21 @@ const mockSummaryStats: AttendanceSummaryStat[] = [
 ];
 
 const mockAttendanceRecords: AttendanceRecord[] = [
-  { id: '1', date: '22 OCT, 2020', checkIn: '09:00 am', checkOut: '05:01 pm', status: 'Present' },
-  { id: '2', date: '21 OCT, 2020', checkIn: '09:05 am', checkOut: '04:55 pm', status: 'Present' },
-  { id: '3', date: '20 OCT, 2020', checkIn: 'N/A', checkOut: 'N/A', status: 'Leave' },
-  { id: '4', date: '19 OCT, 2020', checkIn: '08:58 am', checkOut: '05:03 pm', status: 'Present' },
-  { id: '5', date: '18 OCT, 2020', checkIn: '09:10 am', checkOut: '05:00 pm', status: 'Present' },
-  { id: '6', date: '17 OCT, 2020', checkIn: '09:00 am', checkOut: '05:00 pm', status: 'Present' },
-  { id: '7', date: '16 OCT, 2020', checkIn: 'N/A', checkOut: 'N/A', status: 'Holiday' },
-  { id: '8', date: '15 OCT, 2020', checkIn: '09:15 am', checkOut: '05:10 pm', status: 'Present' },
-  { id: '9', date: '14 OCT, 2020', checkIn: 'N/A', checkOut: 'N/A', status: 'Absent' },
-  { id: '10', date: '13 OCT, 2020', checkIn: '08:55 am', checkOut: '04:50 pm', status: 'Present' },
-  { id: '11', date: '12 OCT, 2020', checkIn: '09:00 am', checkOut: '05:00 pm', status: 'Present' },
+  { id: '1', date: '27 MAY, 2025', checkIn: '09:00 am', checkOut: '05:01 pm', status: 'Present' },
+  { id: '2', date: '26 MAY, 2025', checkIn: '09:05 am', checkOut: '04:55 pm', status: 'Present' },
+  { id: '3', date: '23 MAY, 2025', checkIn: 'N/A', checkOut: 'N/A', status: 'Leave' }, // Friday
+  { id: '4', date: '22 MAY, 2025', checkIn: '08:58 am', checkOut: '05:03 pm', status: 'Present' },
+  { id: '5', date: '21 MAY, 2025', checkIn: '09:10 am', checkOut: '05:00 pm', status: 'Present' },
+  { id: '6', date: '20 MAY, 2025', checkIn: '09:00 am', checkOut: '05:00 pm', status: 'Present' },
+  { id: '7', date: '19 MAY, 2025', checkIn: 'N/A', checkOut: 'N/A', status: 'Holiday' }, // Victoria Day (Example Holiday)
+  { id: '8', date: '16 APR, 2025', checkIn: '09:15 am', checkOut: '05:10 pm', status: 'Present' },
+  { id: '9', date: '15 APR, 2025', checkIn: 'N/A', checkOut: 'N/A', status: 'Absent' },
+  { id: '10', date: '14 APR, 2025', checkIn: '08:55 am', checkOut: '04:50 pm', status: 'Present' },
+  { id: '11', date: '11 APR, 2025', checkIn: '09:00 am', checkOut: '05:00 pm', status: 'Present' },
+  { id: '12', date: '10 APR, 2025', checkIn: '09:02 am', checkOut: '05:02 pm', status: 'Present' },
+  { id: '13', date: '09 APR, 2025', checkIn: 'N/A', checkOut: 'N/A', status: 'Leave' },
+  { id: '14', date: '08 APR, 2025', checkIn: '08:59 am', checkOut: '04:58 pm', status: 'Present' },
+  { id: '15', date: '07 APR, 2025', checkIn: '09:03 am', checkOut: '05:00 pm', status: 'Present' },
 ];
 
 const ModulePage: React.FC = () => {
