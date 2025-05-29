@@ -1,6 +1,4 @@
 
-import type { LucideIcon } from 'lucide-react';
-
 export interface AttendanceUser {
   name: string;
   role: string;
@@ -14,7 +12,7 @@ export interface AttendanceSummaryStat {
   id: string;
   label: string;
   value: string;
-  icon: LucideIcon;
+  icon: string; // Changed from LucideIcon to string to match usage
   iconColorClass: string;
   bgColorClass: string;
 }
